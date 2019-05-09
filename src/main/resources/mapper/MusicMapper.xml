@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xmz.dao.MusicMapper">
+  <resultMap id="BaseResultMap" type="com.xmz.pojo.Music">
+    <id column="mid" jdbcType="INTEGER" property="mid" />
+    <result column="music_name" jdbcType="VARCHAR" property="musicName" />
+    <result column="role" jdbcType="TINYINT" property="role" />
+    <result column="score_price" jdbcType="DECIMAL" property="scorePrice" />
+    <result column="score_reserve" jdbcType="INTEGER" property="scoreReserve" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="cid" jdbcType="INTEGER" property="cid" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.xmz.pojo.MusicWithBLOBs">
+    <result column="music_info" jdbcType="LONGVARCHAR" property="musicInfo" />
+    <result column="music_file" jdbcType="LONGVARCHAR" property="musicFile" />
+    <result column="score" jdbcType="LONGVARCHAR" property="score" />
+    <result column="picture" jdbcType="LONGVARCHAR" property="picture" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    mid, music_name, role, score_price, score_reserve, update_time, cid
+  </sql>
+  <sql id="Blob_Column_List">
+    music_info, music_file, score, picture
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.xmz.pojo.MusicExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from music
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.xmz.pojo.MusicExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from music
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from music
+    where mid = #{mid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from music
+    where mid = #{mid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xmz.pojo.MusicExample">
+    delete from music
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xmz.pojo.MusicWithBLOBs">
+    insert into music (mid, music_name, role, 
+      score_price, score_reserve, update_time, 
+      cid, music_info, music_file, 
+      score, picture)
+    values (#{mid,jdbcType=INTEGER}, #{musicName,jdbcType=VARCHAR}, #{role,jdbcType=TINYINT}, 
+      #{scorePrice,jdbcType=DECIMAL}, #{scoreReserve,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{cid,jdbcType=INTEGER}, #{musicInfo,jdbcType=LONGVARCHAR}, #{musicFile,jdbcType=LONGVARCHAR}, 
+      #{score,jdbcType=LONGVARCHAR}, #{picture,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xmz.pojo.MusicWithBLOBs">
+    insert into music
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mid != null">
+        mid,
+      </if>
+      <if test="musicName != null">
+        music_name,
+      </if>
+      <if test="role != null">
+        role,
+      </if>
+      <if test="scorePrice != null">
+        score_price,
+      </if>
+      <if test="scoreReserve != null">
+        score_reserve,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="cid != null">
+        cid,
+      </if>
+      <if test="musicInfo != null">
+        music_info,
+      </if>
+      <if test="musicFile != null">
+        music_file,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="picture != null">
+        picture,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mid != null">
+        #{mid,jdbcType=INTEGER},
+      </if>
+      <if test="musicName != null">
+        #{musicName,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        #{role,jdbcType=TINYINT},
+      </if>
+      <if test="scorePrice != null">
+        #{scorePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="scoreReserve != null">
+        #{scoreReserve,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cid != null">
+        #{cid,jdbcType=INTEGER},
+      </if>
+      <if test="musicInfo != null">
+        #{musicInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="musicFile != null">
+        #{musicFile,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="picture != null">
+        #{picture,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xmz.pojo.MusicExample" resultType="java.lang.Long">
+    select count(*) from music
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update music
+    <set>
+      <if test="record.mid != null">
+        mid = #{record.mid,jdbcType=INTEGER},
+      </if>
+      <if test="record.musicName != null">
+        music_name = #{record.musicName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.role != null">
+        role = #{record.role,jdbcType=TINYINT},
+      </if>
+      <if test="record.scorePrice != null">
+        score_price = #{record.scorePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.scoreReserve != null">
+        score_reserve = #{record.scoreReserve,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.cid != null">
+        cid = #{record.cid,jdbcType=INTEGER},
+      </if>
+      <if test="record.musicInfo != null">
+        music_info = #{record.musicInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.musicFile != null">
+        music_file = #{record.musicFile,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.score != null">
+        score = #{record.score,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.picture != null">
+        picture = #{record.picture,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update music
+    set mid = #{record.mid,jdbcType=INTEGER},
+      music_name = #{record.musicName,jdbcType=VARCHAR},
+      role = #{record.role,jdbcType=TINYINT},
+      score_price = #{record.scorePrice,jdbcType=DECIMAL},
+      score_reserve = #{record.scoreReserve,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      cid = #{record.cid,jdbcType=INTEGER},
+      music_info = #{record.musicInfo,jdbcType=LONGVARCHAR},
+      music_file = #{record.musicFile,jdbcType=LONGVARCHAR},
+      score = #{record.score,jdbcType=LONGVARCHAR},
+      picture = #{record.picture,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update music
+    set mid = #{record.mid,jdbcType=INTEGER},
+      music_name = #{record.musicName,jdbcType=VARCHAR},
+      role = #{record.role,jdbcType=TINYINT},
+      score_price = #{record.scorePrice,jdbcType=DECIMAL},
+      score_reserve = #{record.scoreReserve,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      cid = #{record.cid,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xmz.pojo.MusicWithBLOBs">
+    update music
+    <set>
+      <if test="musicName != null">
+        music_name = #{musicName,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        role = #{role,jdbcType=TINYINT},
+      </if>
+      <if test="scorePrice != null">
+        score_price = #{scorePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="scoreReserve != null">
+        score_reserve = #{scoreReserve,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cid != null">
+        cid = #{cid,jdbcType=INTEGER},
+      </if>
+      <if test="musicInfo != null">
+        music_info = #{musicInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="musicFile != null">
+        music_file = #{musicFile,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="score != null">
+        score = #{score,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="picture != null">
+        picture = #{picture,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where mid = #{mid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.xmz.pojo.MusicWithBLOBs">
+    update music
+    set music_name = #{musicName,jdbcType=VARCHAR},
+      role = #{role,jdbcType=TINYINT},
+      score_price = #{scorePrice,jdbcType=DECIMAL},
+      score_reserve = #{scoreReserve,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      cid = #{cid,jdbcType=INTEGER},
+      music_info = #{musicInfo,jdbcType=LONGVARCHAR},
+      music_file = #{musicFile,jdbcType=LONGVARCHAR},
+      score = #{score,jdbcType=LONGVARCHAR},
+      picture = #{picture,jdbcType=LONGVARCHAR}
+    where mid = #{mid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xmz.pojo.Music">
+    update music
+    set music_name = #{musicName,jdbcType=VARCHAR},
+      role = #{role,jdbcType=TINYINT},
+      score_price = #{scorePrice,jdbcType=DECIMAL},
+      score_reserve = #{scoreReserve,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      cid = #{cid,jdbcType=INTEGER}
+    where mid = #{mid,jdbcType=INTEGER}
+  </update>
+</mapper>
